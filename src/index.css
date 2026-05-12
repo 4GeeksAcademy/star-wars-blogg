@@ -1,0 +1,14 @@
+.scroll-container {
+    display: flex;
+    overflow-x: auto;
+    padding-bottom: 15px;
+}
+
+/* Opcional: Hacer el scroll más bonito */
+.scroll-container::-webkit-scrollbar {
+    height: 8px;
+}
+.scroll-container::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 10px;
+}
