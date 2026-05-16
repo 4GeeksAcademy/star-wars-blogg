@@ -1,18 +1,26 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import useGlobalReducer from "../hooks/useGlobalReducer";
 
 export const Card = ({ item, endpoint }) => {
-  const { store, dispatch } = useGlobalReducer();
+  const { store, dispatch } = useGlobalReducer();  
+  const [properties, setProperties] = useState(null);
 
-  // 1. Mapeo de categorías para Visual Guide
   const category = endpoint === "people" ? "characters" : endpoint;
-  
-  // 2. URL principal (Intentando la oficial o el mirror de GitHub)
   const imageUrl = `https://starwars-visualguide.com/assets/img/${category}/${item.uid}.jpg`;
-
-  // 3. URL de Robohash (Plan de respaldo funcional)
   const roboFallback = `https://robohash.org/${item.name.replace(/\s+/g, "")}.png?set=set2&size=400x250`;
+
+  
+  useEffect(() => {
+    fetch(`https://www.swapi.tech/api/${endpoint}/${item.uid}`)
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.result && data.result.properties) {
+          setProperties(data.result.properties);
+        }
+      })
+      .catch((err) => console.error(`Error en tarjeta ${item.name}:`, err));
+  }, [endpoint, item.uid]);
 
   const toggleFavorite = () => {
     if (store.favorites.includes(item.name)) {
@@ -38,19 +46,39 @@ export const Card = ({ item, endpoint }) => {
         <h5 className="card-title text-start fw-bold">{item.name}</h5>
         
         <div className="card-text mb-4 text-start">
-          {/* Nota: Aquí se mantienen los "..." porque la API swapi.tech 
-              solo entrega estos detalles en la vista individual (fetch por ID).
-          */}
-          <p className="m-0 small text-muted"><strong>Gender:</strong> ...</p>
-          <p className="m-0 small text-muted"><strong>Hair Color:</strong> ...</p>
-          <p className="m-0 small text-muted"><strong>Eye Color:</strong> ...</p>
+          
+          {!properties ? (
+            <p className="m-0 small text-muted">Cargando transmisión...</p>
+          ) : (
+            <>
+              
+              {endpoint === "people" && (
+                <>
+                  <p className="m-0 small text-muted"><strong>Gender:</strong> {properties.gender || "n/a"}</p>
+                  <p className="m-0 small text-muted"><strong>Hair Color:</strong> {properties.hair_color || "n/a"}</p>
+                  <p className="m-0 small text-muted"><strong>Eye Color:</strong> {properties.eye_color || "n/a"}</p>
+                </>
+              )}
+              {endpoint === "planets" && (
+                <>
+                  <p className="m-0 small text-muted"><strong>Climate:</strong> {properties.climate || "n/a"}</p>
+                  <p className="m-0 small text-muted"><strong>Population:</strong> {properties.population || "n/a"}</p>
+                  <p className="m-0 small text-muted"><strong>Terrain:</strong> {properties.terrain || "n/a"}</p>
+                </>
+              )}
+              {endpoint === "vehicles" && (
+                <>
+                  <p className="m-0 small text-muted"><strong>Model:</strong> {properties.model || "n/a"}</p>
+                  <p className="m-0 small text-muted"><strong>Class:</strong> {properties.vehicle_class || "n/a"}</p>
+                  <p className="m-0 small text-muted"><strong>Cost:</strong> {properties.cost_in_credits || "n/a"}</p>
+                </>
+              )}
+            </>
+          )}
         </div>
 
         <div className="d-flex justify-content-between mt-auto">
-          {/* CORRECCIÓN AQUÍ: 
-              La ruta ahora envía el endpoint (people/planets) y el uid.
-              Esto coincide con: path="/single/:type/:id" en routes.jsx
-          */}
+          
           <Link to={`/single/${endpoint}/${item.uid}`} className="btn btn-outline-primary px-3">
             Learn more!
           </Link>

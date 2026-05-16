@@ -4,7 +4,7 @@
     padding-bottom: 15px;
 }
 
-/* Opcional: Hacer el scroll más bonito */
+
 .scroll-container::-webkit-scrollbar {
     height: 8px;
 }
@@ -12,3 +12,15 @@
     background: #888;
     border-radius: 10px;
 }
+
+
+body {
+    background-image: url("https://wallpapers.com/images/hd/star-wars-landscape-2392-x-1080-lfz3lh6paolpiyax.jpg");
+    background-size: cover;          
+    background-position: center;     
+    background-repeat: no-repeat;    
+    background-attachment: fixed;    
+    color: #ffffff;                  
+    min-height: 100vh;
+}
+

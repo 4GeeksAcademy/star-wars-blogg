@@ -5,7 +5,7 @@ import {
 } from "react-router-dom";
 import { Layout } from "./pages/Layout";
 import { Home } from "./pages/Home";
-import { Detalles } from "./pages/Detalles"; // Asegúrate de que el componente dentro del archivo se llame Detalles
+import { Detalles } from "./pages/Detalles"; 
 import { Demo } from "./pages/Demo";
 
 export const router = createBrowserRouter(
@@ -14,7 +14,7 @@ export const router = createBrowserRouter(
 
         <Route path="/" element={<Home />} />
 
-        {/* CORRECCIÓN: Usamos el componente Detalles que importamos arriba */}
+        
         <Route path="/single/:type/:id" element={<Detalles />} />
         
         <Route path="/demo" element={<Demo />} />

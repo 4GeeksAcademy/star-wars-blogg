@@ -26,7 +26,7 @@ export default function storeReducer(store, action = {}) {
         vehicles: action.payload,
       };
     case "add_favorite":
-      // Evitamos duplicados: solo agregamos si no existe ya
+      
       if (store.favorites.includes(action.payload)) return store;
       return {
         ...store,
@@ -45,8 +45,7 @@ export default function storeReducer(store, action = {}) {
           todo.id === id ? { ...todo, background: color } : todo
         ),
       };
-    default:
-      // ¡IMPORTANTE! Retornar el store tal cual si la acción no coincide
+    default:      
       return store;
   }
 }
